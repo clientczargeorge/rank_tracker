@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  react:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rank_tracker_server
+    volumes:
+      - .:/code
+    ports:
+      - "3000:3000"
+    depends_on:
+      - flask
+
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile.flask
+    container_name: flask-serp-api
+    volumes:
+      - .:/code
+    ports:
+      - "5000:5000"

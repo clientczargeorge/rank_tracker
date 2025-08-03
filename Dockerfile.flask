@@ -1,0 +1,17 @@
+# Use the official Python base image
+FROM python:3.11-slim
+
+# Set the working directory
+WORKDIR /code
+
+# Install Flask and flask-cors
+RUN pip install Flask flask-cors serpapi python-dotenv
+
+# Copy the app code into the container
+COPY flask-api.py .
+
+# Expose port 5000 for the Flask app
+EXPOSE 5000
+
+# Run the app
+CMD ["python", "flask-api.py"]

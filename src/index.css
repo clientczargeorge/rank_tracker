@@ -11,3 +11,32 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #202124;
+    background-color: white;
+}
+
+th, td {
+    border: 1px solid #dadce0;
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+thead {
+    background-color: #f1f3f4;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+tr:hover {
+    background-color: #e8f0fe;
+}
