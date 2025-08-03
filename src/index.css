@@ -40,3 +40,21 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #e8f0fe;
 }
+
+.rank {
+    font-family: Source Sans Pro;
+    font-size: 31px;
+    font-weight: bold;
+    color: rgb(66, 189, 0);
+    vertical-align: middle;
+    text-align: center;
+    padding: 1px 2px;
+    max-width: 228px;
+    max-height: 488px;
+    display: inline-block;
+    min-width: 46px;
+    min-height: 39px;
+    left: 325px;
+    top: 452px;
+    overflow: hidden;
+}

@@ -23,61 +23,77 @@ def serp_results():
     client_url = request.args.get("client_url")
     client_name = request.args.get("client_name")
     keyword = request.args.get("keyword")
+    source = request.args.get("source")
 
     if request.args.get("debug") == "true":
         return jsonify({
-            "keyword": -1,
-            "maps": 0,
-            "google":3,
+            "gmaps": 0,
+            "google":1,
             "yahoo": 2,
             "bing": 0
         })
 
-    # Get Google ranking for the client URL
-    s = serp_client.search(q=keyword, engine="google", google_domain="google.com", hl="en", gl="us")
-    client_ranking_google = -1
-    organic_results_list = s["organic_results"]
-    for entry in organic_results_list:
-        if client_url == urlparse(entry.get("link")).netloc:
-            client_ranking_google = entry.get("position")
-            break
+    if source == "google":
+        # Get Google ranking for the client URL
+        s = serp_client.search(q=keyword, engine="google", google_domain="google.com", hl="en", gl="us")
+        organic_results_list = s["organic_results"]
+        for entry in organic_results_list:
+            if client_url == urlparse(entry.get("link")).netloc:
+                client_ranking_google = entry.get("position")
+                return jsonify({
+                    "google": client_ranking_google,
+                })
+        # If no ranking found, return -1
+        return jsonify({
+            "google": -1,
+        })
 
-    # Get Bing ranking for the client URL
-    client_ranking_bing = -1
-    s = serp_client.search(q=keyword, engine="bing", hl="en", gl="us")
-    organic_results_list = s["organic_results"]
-    for entry in organic_results_list:
-        if client_url == urlparse(entry.get("link")).netloc:
-            client_ranking_bing = entry.get("position")
-            break
+    elif source == "bing":
+        # Get Bing ranking for the client URL
+        s = serp_client.search(q=keyword, engine="bing", hl="en", gl="us")
+        organic_results_list = s["organic_results"]
+        for entry in organic_results_list:
+            if client_url == urlparse(entry.get("link")).netloc:
+                client_ranking_bing = entry.get("position")
+                return jsonify({
+                    "bing": client_ranking_bing,
+                })
+        # If no ranking found, return -1
+        return jsonify({
+            "bing": -1,
+        })
 
-    # Get Yahoo ranking for the client URL
-    client_ranking_yahoo = -1
-    s = serp_client.search(p=keyword, engine="yahoo", hl="en", gl="us")
-    organic_results_list = s["organic_results"]
-    for entry in organic_results_list:
-        if client_url == urlparse(entry.get("link")).netloc:
-            client_ranking_yahoo = entry.get("position")
-            break
+    elif source == "yahoo":
+        # Get Yahoo ranking for the client URL
+        s = serp_client.search(p=keyword, engine="yahoo", hl="en", gl="us")
+        organic_results_list = s["organic_results"]
+        for entry in organic_results_list:
+            if client_url == urlparse(entry.get("link")).netloc:
+                client_ranking_yahoo = entry.get("position")
+                return jsonify({
+                    "yahoo": client_ranking_yahoo,
+                })
+        # If no ranking found, return -1
+        return jsonify({
+            "yahoo": -1,
+        })
 
-    # Get Google Maps ranking for the client URL
-    client_ranking_gmaps = -1
-    s = serp_client.search(q=keyword, engine="google_maps", hl="en", gl="us")
-    results_list = s["local_results"]
-    for entry in results_list:
-        if client_name == entry.get("title"):
-            client_ranking_gmaps = entry.get("position")
-            break
+    elif source == "gmaps":
+        # Get Google Maps ranking for the client URL
+        s = serp_client.search(q=keyword, engine="google_maps", hl="en", gl="us")
+        results_list = s["local_results"]
+        for entry in results_list:
+            if client_name == entry.get("title"):
+                client_ranking_gmaps = entry.get("position")
+                return jsonify({
+                    "gmaps": client_ranking_gmaps,
+                })
+        # If no ranking found, return -1
+        return jsonify({
+            "gmaps": -1,
+        })
 
-    data = {
-            "keyword": client_name,
-            "maps": client_ranking_gmaps,
-            "google": client_ranking_google,
-            "yahoo": client_ranking_yahoo,
-            "bing": client_ranking_bing
-    }
-
-    return jsonify(data)
+    return "error"
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
