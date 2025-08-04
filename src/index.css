@@ -24,7 +24,7 @@ table {
 th, td {
     border: 1px solid #dadce0;
     padding: 8px 12px;
-    text-align: left;
+    text-align: center;
     vertical-align: middle;
 }
 
@@ -45,7 +45,6 @@ tr:hover {
     font-family: Source Sans Pro;
     font-size: 31px;
     font-weight: bold;
-    color: rgb(66, 189, 0);
     vertical-align: middle;
     text-align: center;
     padding: 1px 2px;
@@ -57,4 +56,52 @@ tr:hover {
     left: 325px;
     top: 452px;
     overflow: hidden;
+}
+
+.rank-1 {
+    color: #358c17;
+}
+
+.rank-2 {
+    color: #4ab026;
+}
+
+.rank-3 {
+    color: #7fc168;
+}
+
+.rank-4 {
+    color: #b6d7a8;
+}
+
+.rank-5 {
+    color: #fed45b;
+}
+
+.rank-6 {
+    color: #f8de93;;
+}
+
+.rank-7 {
+    color: #f6b26b;
+}
+
+.rank-8 {
+    color: #e69138;
+}
+
+.rank-9 {
+    color: #ea9999;
+}
+
+.rank-10 {
+    color: #e06666;
+}
+
+.no-rank {
+    color: #e35454;
+}
+
+.keyword {
+    text-align: left;
 }

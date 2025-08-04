@@ -5,25 +5,23 @@ import React, { useState, useEffect } from 'react';
 
 function getRankSymbol(rank) {
     const symbol_map = {
-        1: '➊',
-        2: '➋',
-        3: '➌',
-        4: '➍',
-        5: '➎',
-        6: '➏',
-        7: '➐',
-        8: '➑',
-        9: '➒',
-        10: '➓',
+        1:  (<span className="rank rank-1">➊</span>),
+        2: (<span className="rank rank-2">➋</span>),
+        3: (<span className="rank rank-3">➌</span>),
+        4: (<span className="rank rank-4">➍</span>),
+        5: (<span className="rank rank-5">➎</span>),
+        6: (<span className="rank rank-6">➏</span>),
+        7: (<span className="rank rank-7">➐</span>),
+        8: (<span className="rank rank-8">➑</span>),
+        9: (<span className="rank rank-9">➒</span>),
+        10: (<span className="rank rank-10">➓</span>),
     }
 
     if (symbol_map[rank]) {
-        return (
-            <span className="rank">{symbol_map[rank]}</span>
-        );
+        return (symbol_map[rank]);
     } else {
         return (
-            <span className="rank">-</span>
+            <span className="rank no-rank">-</span>
         );
     }
 }
@@ -32,7 +30,7 @@ function App() {
     const [rankList, setRankList] = useState([]);
     const clientName = "Avid Coffee";
     const clientUrl = "avidcoffee.com";
-    const keywords = ['Petaluma Coffee', "bay area coffee", "coffee near petaluma CA", "avid coffee", "coffee in petaluma", "trendy coffee shopp petaluma", "best coffee petaluma", "coffee shop petaluma", "coffee roaster petaluma", "coffee roasters petaluma", "coffee shop near me", "coffee roaster near me", "coffee roasters near me", "best coffee near me", "best coffee in petaluma", "best coffee in bay area"];
+    const keywords = ['Petaluma Coffee', "bay area coffee", "coffee near petaluma CA", "avid coffee", "coffee in petaluma", "trendy coffee shopp petaluma", "best coffee petaluma", "coffee shop petaluma", "coffee roaster petaluma", "coffee roasters petaluma", "best coffee in petaluma", "best coffee in bay area"];
     useEffect(() => {
         // A temporary in-memory object to store partially completed rows per keyword.
         // It accumulates results from multiple fetches (one per search engine).
@@ -46,7 +44,7 @@ function App() {
             // For each source (e.g. Google, Yahoo), send a separate fetch request
             sources.forEach((source) => {
                 // Construct the API URL dynamically with the correct query parameters
-                const url = `http://localhost:5000/api?source=${source}&debug=false&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
+                const url = `http://localhost:5000/api?source=${source}&debug=true&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
 
                 // Fetch results from the backend API
                 fetch(url)
@@ -56,8 +54,9 @@ function App() {
                         keywordMap[phrase] = keywordMap[phrase] || { keyword: phrase };
 
                         // Save the result under the appropriate source name (e.g. "google", "bing", etc.)
-                        // We assume the API returns an object like { google: 1 }, so we extract data[source]
-                        keywordMap[phrase][source] = data[source];
+                        // We assume the API returns an object like { google: 1, reference_url: "https://googl....." } so we extract both fields
+                        // as a tuple that's stored in the keywordMap list.
+                        keywordMap[phrase][source] = [data[source], data["reference_url"]];
 
                         // Update the React component's rank list state.
                         // This rebuilds the rank list with the updated row for this keyword.
@@ -85,7 +84,7 @@ function App() {
             <table>
                 <thead>
                     <tr>
-                        <th>Keyword Phrase</th>
+                        <th className="keyword">Keyword Phrase</th>
                         <th>Google</th>
                         <th>Yahoo</th>
                         <th>Bing</th>
@@ -94,11 +93,11 @@ function App() {
                 </thead>
                 {rankList.map((row, index) => (
                     <tr key={index}>
-                        <td>{row.keyword}</td>
-                        <td>{getRankSymbol(row.google)}</td>
-                        <td>{getRankSymbol(row.yahoo)}</td>
-                        <td>{getRankSymbol(row.bing)}</td>
-                        <td>{getRankSymbol(row.gmaps)}</td>
+                        <td className="keyword">{row.keyword}</td>
+                        <td>{row.google ? getRankSymbol(row.google[0]) : "..."} {row.google && (<a href={row.google[1]}>View Google</a>)}</td>
+                        <td>{row.yahoo ? getRankSymbol(row.yahoo[0]) : "..."} {row.yahoo && (<a href={row.yahoo[1]}>View Yahoo</a>)}</td>
+                        <td>{row.bing ? getRankSymbol(row.bing[0]) : "..."} {row.bing && (<a href={row.bing[1]}>View Bing</a>)}</td>
+                        <td>{row.gmaps ? getRankSymbol(row.gmaps[0]) : "..."} {row.gmaps && (<a href={row.gmaps[1]}>View Maps</a>)}</td>
                     </tr>
                 ))}
             </table>
