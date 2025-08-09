@@ -30,17 +30,21 @@ def cache_response(ttl=CACHE_TTL):
     """Decorator to cache view results in Redis."""
     def decorator(f):
         def wrapper(*args, **kwargs):
-            try:
-                # Create a unique cache key from URL path + sorted query params
-                cache_key = f"{request.path}:{json.dumps(request.args, sort_keys=True)}"
-
-                # Check if cached
-                cached_data = cache.get(cache_key)
-                if cached_data:
-                    return jsonify(json.loads(cached_data))
-            except KeyError:
-                # Ignore key errors and proceed as if no cache
-                pass
+            refresh = (request.args.get("refresh") == "true") # The request query parameter forces a refresh of the cached data.
+            # Create a unique cache key from URL path + sorted query params
+            allowed_keys = ["client_name", "client_url", "keyword", "source"]
+            filtered_args = {k: request.args[k] for k in allowed_keys if k in request.args}
+            cache_key = f"{request.path}:{json.dumps(filtered_args, sort_keys=True)}"
+            if not refresh:
+                try:
+                    # Check if cached
+                    cached_data = cache.get(cache_key)
+                    # If cached data exists and refresh is not requested, return cached data
+                    if cached_data:
+                        return jsonify(json.loads(cached_data))
+                except KeyError:
+                    # Ignore key errors and proceed as if no cache
+                    pass
 
             # Call the original function
             result = f(*args, **kwargs)

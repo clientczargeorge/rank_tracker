@@ -34,6 +34,8 @@ function App() {
 
     const clientName = params.get('clientName') || '';
     const clientUrl = params.get('clientUrl') || '';
+    const refresh = params.get('refresh') || 'false';
+    const debug = params.get('debug') || 'false';
 
     const keywordsRaw = params.get('keywords') || '';
     const keywords = keywordsRaw.split(',').map(k => k.trim()).filter(k => k.length > 0);
@@ -51,7 +53,7 @@ function App() {
             // For each source (e.g. Google, Yahoo), send a separate fetch request
             sources.forEach((source) => {
                 // Construct the API URL dynamically with the correct query parameters
-                const url = `http://localhost:5000/api?source=${source}&debug=false&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
+                const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
 
                 // Fetch results from the backend API
                 fetch(url)
