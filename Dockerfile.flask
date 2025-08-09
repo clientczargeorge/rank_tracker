@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /code
 
 # Install Flask and flask-cors
-RUN pip install Flask flask-cors serpapi python-dotenv
+RUN pip install Flask flask-cors serpapi python-dotenv redis
 
 # Copy the app code into the container
 COPY flask-api.py .

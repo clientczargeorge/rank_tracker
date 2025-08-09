@@ -12,9 +12,31 @@ code {
     monospace;
 }
 
+h1, h2 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;               /* Dark gray for readability */
+  font-weight: 600;          /* Semi-bold for emphasis */
+  line-height: 1.2;          /* Tight but readable */
+  margin: 0rem 1rem;   /* Vertical spacing */
+}
+
+h1 {
+    text-align: center;
+  font-size: 2rem;         /* Large and prominent */
+  letter-spacing: -0.02em;   /* Slightly tighter */
+}
+
+h2 {
+  font-size: 1.3rem;         /* Secondary size */
+  letter-spacing: -0.01em;   /* Subtle */
+  color: #444;               /* Slightly lighter than h1 */
+    margin: 1rem 5%;                /* Top and bottom spacing */
+}
+
 table {
+    width: 90%;
+    margin: 0 auto;
     border-collapse: collapse;
-    width: 100%;
     font-family: Arial, sans-serif;
     font-size: 14px;
     color: #202124;
@@ -43,19 +65,11 @@ tr:hover {
 
 .rank {
     font-family: Source Sans Pro;
-    font-size: 31px;
-    font-weight: bold;
-    vertical-align: middle;
-    text-align: center;
-    padding: 1px 2px;
-    max-width: 228px;
-    max-height: 488px;
     display: inline-block;
-    min-width: 46px;
-    min-height: 39px;
-    left: 325px;
-    top: 452px;
-    overflow: hidden;
+    padding-top: 3px; /* The symbols for rankings for some reason don't appear vertically centered so this helps offset that.*/
+    margin-right: 5px; /* This adds a little bit of room for the <a> anchors next to it. */
+    font-size: 31px;
+    vertical-align: middle;
 }
 
 .rank-1 {
@@ -100,8 +114,28 @@ tr:hover {
 
 .no-rank {
     color: #e35454;
+    font-size: 28px;
 }
 
 .keyword {
     text-align: left;
+}
+
+.spinner {
+  border: 4px solid #ccc;          /* Light gray background */
+  border-top: 4px solid #0e61cc;
+  border-radius: 50%;              /* Circle */
+  width: 15px;
+  height: 15px;
+  animation: spin 1s linear infinite; /* Spin infinitely */
+}
+
+.spinner-container {
+    display: grid;
+    justify-content: center;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

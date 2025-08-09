@@ -21,16 +21,23 @@ function getRankSymbol(rank) {
         return (symbol_map[rank]);
     } else {
         return (
-            <span className="rank no-rank">-</span>
+            <span className="rank no-rank">⊘</span>
         );
     }
 }
 
 function App() {
     const [rankList, setRankList] = useState([]);
-    const clientName = "Avid Coffee";
-    const clientUrl = "avidcoffee.com";
-    const keywords = ['Petaluma Coffee', "bay area coffee", "coffee near petaluma CA", "avid coffee", "coffee in petaluma", "trendy coffee shopp petaluma", "best coffee petaluma", "coffee shop petaluma", "coffee roaster petaluma", "coffee roasters petaluma", "best coffee in petaluma", "best coffee in bay area"];
+
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+
+    const clientName = params.get('clientName') || '';
+    const clientUrl = params.get('clientUrl') || '';
+
+    const keywordsRaw = params.get('keywords') || '';
+    const keywords = keywordsRaw.split(',').map(k => k.trim()).filter(k => k.length > 0);
+
     useEffect(() => {
         // A temporary in-memory object to store partially completed rows per keyword.
         // It accumulates results from multiple fetches (one per search engine).
@@ -78,9 +85,9 @@ function App() {
     }, []); // Empty dependency array: this effect only runs once after the component mounts
     return (
         <>
-            <h2>Rank Tracker</h2>
-            <h3>Client: {clientName}</h3>
-            <h3>Client URL: {clientUrl}</h3>
+            <h1>Rank Tracker</h1>
+            <h2>Client Name: <code>{clientName}</code></h2>
+            <h2>Client Website: <code>{clientUrl}</code></h2>
             <table>
                 <thead>
                     <tr>
@@ -91,15 +98,17 @@ function App() {
                         <th>Maps</th>
                     </tr>
                 </thead>
-                {rankList.map((row, index) => (
-                    <tr key={index}>
-                        <td className="keyword">{row.keyword}</td>
-                        <td>{row.google ? getRankSymbol(row.google[0]) : "..."} {row.google && (<a href={row.google[1]}>View Google</a>)}</td>
-                        <td>{row.yahoo ? getRankSymbol(row.yahoo[0]) : "..."} {row.yahoo && (<a href={row.yahoo[1]}>View Yahoo</a>)}</td>
-                        <td>{row.bing ? getRankSymbol(row.bing[0]) : "..."} {row.bing && (<a href={row.bing[1]}>View Bing</a>)}</td>
-                        <td>{row.gmaps ? getRankSymbol(row.gmaps[0]) : "..."} {row.gmaps && (<a href={row.gmaps[1]}>View Maps</a>)}</td>
-                    </tr>
-                ))}
+                <tbody>
+                    {rankList.slice().sort((a, b) => a.keyword.localeCompare(b.keyword)).map((row, index) => (
+                        <tr key={index}>
+                            <td className="keyword">{row.keyword}</td>
+                            <td>{row.google ? getRankSymbol(row.google[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.google && (<a href={row.google[1]} target="_blank" rel="noopener noreferrer">View Google</a>)}</td>
+                            <td>{row.yahoo ? getRankSymbol(row.yahoo[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.yahoo && (<a href={row.yahoo[1]} target="_blank" rel="noopener noreferrer">View Yahoo</a>)}</td>
+                            <td>{row.bing ? getRankSymbol(row.bing[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.bing && (<a href={row.bing[1]} target="_blank" rel="noopener noreferrer">View Bing</a>)}</td>
+                            <td>{row.gmaps ? getRankSymbol(row.gmaps[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.gmaps && (<a href={row.gmaps[1]} target="_blank" rel="noopener noreferrer">View Maps</a>)}</td>
+                        </tr>
+                    ))}
+                </tbody>
             </table>
         </>
     );

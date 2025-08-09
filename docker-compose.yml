@@ -22,6 +22,18 @@ services:
       - .:/code
     ports:
       - "5000:5000"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
 
 volumes:
   node_modules:
+  redis_data:
