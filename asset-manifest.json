@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/rank_tracker/static/css/main.b9832bb2.css",
-    "main.js": "/rank_tracker/static/js/main.731ff0b2.js",
+    "main.js": "/rank_tracker/static/js/main.7aedb3f8.js",
     "static/js/453.b6c8eea9.chunk.js": "/rank_tracker/static/js/453.b6c8eea9.chunk.js",
     "index.html": "/rank_tracker/index.html",
     "main.b9832bb2.css.map": "/rank_tracker/static/css/main.b9832bb2.css.map",
-    "main.731ff0b2.js.map": "/rank_tracker/static/js/main.731ff0b2.js.map",
+    "main.7aedb3f8.js.map": "/rank_tracker/static/js/main.7aedb3f8.js.map",
     "453.b6c8eea9.chunk.js.map": "/rank_tracker/static/js/453.b6c8eea9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b9832bb2.css",
-    "static/js/main.731ff0b2.js"
+    "static/js/main.7aedb3f8.js"
   ]
 }
