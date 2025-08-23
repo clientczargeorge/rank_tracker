@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile.react_server
     container_name: rank-tracker-server
     volumes:
-      - .:/code
+      - /code/rank_tracker:/code:Z
       - node_modules:/code/node_modules  # store the node modules in a volume
     ports:
       - "3000:3000"
@@ -18,15 +18,15 @@ services:
       context: .
       dockerfile: Dockerfile.flask
     container_name: flask-serp-api
-    volumes:
-      - .:/code
     ports:
       - "5000:5000"
     depends_on:
       - redis
+    env_file:
+      - .env
 
   redis:
-    image: redis:7-alpine
+    image: docker.io/library/redis:7-alpine
     container_name: redis-cache
     ports:
       - "6379:6379"

@@ -8,20 +8,15 @@ import random
 
 # importing os module for environment variables
 import os
-# importing necessary functions from dotenv library
-from dotenv import load_dotenv, dotenv_values
 
 from urllib.parse import urlparse
 
 app = Flask(__name__)
 CORS(app)
 
-# loading variables from .env file
-load_dotenv()
-
 cache = redis.Redis(host="redis", port=6379, decode_responses=True)
 
-
+# The SERP_KEY is loaded from the environment variable which is set by docker-compose.
 serp_client = serpapi.Client(api_key=os.getenv("SERP_KEY"))
 CACHE_TTL = 3600  # This sets how long the cache will hold the data (in seconds)
 
@@ -222,5 +217,5 @@ def serp_results():
 
     return jsonify({"error": "Invalid source"})
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+#if __name__ == '__main__':
+#    app.run(debug=True, host='0.0.0.0', port=5000)

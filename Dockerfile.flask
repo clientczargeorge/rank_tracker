@@ -5,13 +5,13 @@ FROM python:3.11-slim
 WORKDIR /code
 
 # Install Flask and flask-cors
-RUN pip install Flask flask-cors serpapi python-dotenv redis
+RUN pip install Flask flask-cors serpapi redis gunicorn
 
 # Copy the app code into the container
-COPY flask-api.py .
+COPY flask_api.py .
 
 # Expose port 5000 for the Flask app
 EXPOSE 5000
 
 # Run the app
-CMD ["python", "flask-api.py"]
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "flask_api:app"]
