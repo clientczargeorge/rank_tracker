@@ -18,7 +18,7 @@ cache = redis.Redis(host="redis", port=6379, decode_responses=True)
 
 # The SERP_KEY is loaded from the environment variable which is set by docker-compose.
 serp_client = serpapi.Client(api_key=os.getenv("SERP_KEY"))
-CACHE_TTL = 3600  # This sets how long the cache will hold the data (in seconds)
+CACHE_TTL = 604800  # This sets how long the cache will hold the data (in seconds) (1 week)
 
 
 def cache_response(ttl=CACHE_TTL):
