@@ -6,8 +6,8 @@ services:
       dockerfile: Dockerfile.react_server
     container_name: rank-tracker-server
     volumes:
-      - /code/rank_tracker:/code:Z
       - node_modules:/code/node_modules  # store the node modules in a volume
+      - ./src:/code/src
     ports:
       - "3000:3000"
     depends_on:

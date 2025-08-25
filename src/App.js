@@ -94,7 +94,7 @@ function App() {
                 <thead>
                     <tr>
                         <th className="keyword">Keyword Phrase</th>
-                        <th>Google</th>
+                        <th>Google<img src="/google_logo1234.png" alt="Google Search Logo"/></th>
                         <th>Yahoo</th>
                         <th>Bing</th>
                         <th>Maps</th>
