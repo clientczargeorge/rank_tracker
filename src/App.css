@@ -28,6 +28,51 @@
   color: #61dafb;
 }
 
+.h1-logo {
+  margin-top: 20px;
+  height: 60px;
+  width: auto;
+}
+
+h2 {
+  display: block;
+    font-family: Arial;
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+h3 {
+  display: block;
+  font-family: Arial;
+  font-size: 22px;
+  color: #4d5868;
+  margin-bottom: 10px;
+}
+
+h4 {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  display: block;
+  color: #8d97a7;
+  font-family: Arial;
+  font-size: 16px;
+}
+
+.column-logo {
+  width: 47px;
+  height: auto;
+}
+
+code {
+  background-color: #a8d6ff61;
+}
+
+.keyword {
+  font-family: Arial;
+  font-size: 16px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -36,3 +81,4 @@
     transform: rotate(360deg);
   }
 }
+

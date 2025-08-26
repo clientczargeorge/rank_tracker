@@ -18,6 +18,8 @@ services:
       context: .
       dockerfile: Dockerfile.flask
     container_name: flask-serp-api
+    volumes:
+      - ./backend:/code/backend
     ports:
       - "5000:5000"
     depends_on:

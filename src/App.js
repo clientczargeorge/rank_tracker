@@ -2,6 +2,13 @@ import './App.css';
 import { useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
+// import images
+import googleLogo from './images/google_logo.png';
+import yahooLogo from './images/yahoo_logo.png';
+import gmapsLogo from './images/gmaps_logo.png';
+import bingLogo from './images/bing_logo.png';
+import rankTrackerLogo from './images/Search_Rank_Tracker_Logo.png';
+
 
 function getRankSymbol(rank) {
     const symbol_map = {
@@ -53,7 +60,8 @@ function App() {
             // For each source (e.g. Google, Yahoo), send a separate fetch request
             sources.forEach((source) => {
                 // Construct the API URL dynamically with the correct query parameters
-                const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
+                //const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
+                const url = `https://rank-tracker.duckdns.org/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
 
                 // Fetch results from the backend API
                 fetch(url)
@@ -87,21 +95,23 @@ function App() {
     }, []); // Empty dependency array: this effect only runs once after the component mounts
     return (
         <>
-            <h1>Rank Tracker</h1>
+            <h1>
+                <img src={rankTrackerLogo} alt="Rank Tracker Logo" className="h1-logo logo"/>
+            </h1>
             <h2>Client Name: <code>{clientName}</code></h2>
             <h2>Client Website: <code>{clientUrl}</code></h2>
             <table>
                 <thead>
-                    <tr>
-                        <th className="keyword">Keyword Phrase</th>
-                        <th>Google<img src="/google_logo1234.png" alt="Google Search Logo"/></th>
-                        <th>Yahoo</th>
-                        <th>Bing</th>
-                        <th>Maps</th>
-                    </tr>
+                <tr>
+                    <th className="keyword"><h3>Keyword Phrase</h3></th>
+                    <th><h3>Maps</h3><h4>Local Search</h4><img src={gmapsLogo} alt="Google Maps Logo" className="column-logo"/></th>
+                    <th><h3>Google</h3><h4>Organic Search</h4><img src={googleLogo} alt="Google Search Logo" className="column-logo"/></th>
+                    <th><h3>Yahoo</h3><h4>Organic Search</h4><img src={yahooLogo} alt="Yahoo Logo" className="column-logo"/></th>
+                    <th><h3>Bing</h3><h4>Organic Search</h4><img src={bingLogo} alt="Bing Logo" className="column-logo"/></th>
+                </tr>
                 </thead>
                 <tbody>
-                    {rankList.slice().sort((a, b) => a.keyword.localeCompare(b.keyword)).map((row, index) => (
+                {rankList.slice().sort((a, b) => a.keyword.localeCompare(b.keyword)).map((row, index) => (
                         <tr key={index}>
                             <td className="keyword">{row.keyword}</td>
                             <td>{row.google ? getRankSymbol(row.google[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.google && (<a href={row.google[1]} target="_blank" rel="noopener noreferrer">View Google</a>)}</td>

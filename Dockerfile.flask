@@ -2,13 +2,12 @@
 FROM python:3.11-slim
 
 # Set the working directory
-WORKDIR /code
+WORKDIR /code/backend
 
 # Install Flask and flask-cors
 RUN pip install Flask flask-cors serpapi redis gunicorn
 
-# Copy the app code into the container
-COPY flask_api.py .
+COPY ./backend/flask_api.py .
 
 # Expose port 5000 for the Flask app
 EXPOSE 5000

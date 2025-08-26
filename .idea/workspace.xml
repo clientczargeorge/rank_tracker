@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c728d0f-2b3c-4b47-9b61-32a360070541" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/public/gmaps_logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/google_logo1234.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/yahoo_logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile.react_dev" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile.react_server" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.react_server" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/Search_Rank_Tracker_Logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/images/bing_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile.flask" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile.flask" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/flask_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/gmaps_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/images/gmaps_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/google_logo1234.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/images/google_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/yahoo_logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/images/yahoo_logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,9 +54,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/public" />
+      <recent name="$PROJECT_DIR$/backend" />
+      <recent name="$PROJECT_DIR$/src/images" />
       <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/rank-tracker/src" />
+      <recent name="$PROJECT_DIR$/public/images" />
+      <recent name="$PROJECT_DIR$/public" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -82,7 +88,7 @@
       <workItem from="1755147477456" duration="1000" />
       <workItem from="1755330093383" duration="71000" />
       <workItem from="1755740024822" duration="5440000" />
-      <workItem from="1756141719567" duration="3539000" />
+      <workItem from="1756141719567" duration="11268000" />
     </task>
     <servers />
   </component>
