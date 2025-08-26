@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/rank_tracker/static/css/main.b9832bb2.css",
-    "main.js": "/rank_tracker/static/js/main.2d9c58be.js",
+    "main.css": "/rank_tracker/static/css/main.564838e5.css",
+    "main.js": "/rank_tracker/static/js/main.e5c34115.js",
     "static/js/453.b6c8eea9.chunk.js": "/rank_tracker/static/js/453.b6c8eea9.chunk.js",
+    "static/media/Search_Rank_Tracker_Logo.png": "/rank_tracker/static/media/Search_Rank_Tracker_Logo.7e2fd113a63d35f43f79.png",
     "index.html": "/rank_tracker/index.html",
-    "main.b9832bb2.css.map": "/rank_tracker/static/css/main.b9832bb2.css.map",
-    "main.2d9c58be.js.map": "/rank_tracker/static/js/main.2d9c58be.js.map",
+    "main.564838e5.css.map": "/rank_tracker/static/css/main.564838e5.css.map",
+    "main.e5c34115.js.map": "/rank_tracker/static/js/main.e5c34115.js.map",
     "453.b6c8eea9.chunk.js.map": "/rank_tracker/static/js/453.b6c8eea9.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b9832bb2.css",
-    "static/js/main.2d9c58be.js"
+    "static/css/main.564838e5.css",
+    "static/js/main.e5c34115.js"
   ]
 }
