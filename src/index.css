@@ -139,3 +139,102 @@ tr:hover {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.h1-logo {
+  margin-top: 20px;
+  height: 60px;
+  width: auto;
+}
+
+h2 {
+  display: block;
+    font-family: Arial;
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+h3 {
+  display: block;
+  font-family: Arial;
+  font-size: 22px;
+  color: #4d5868;
+  margin-bottom: 10px;
+}
+
+h4 {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  display: block;
+  color: #8d97a7;
+  font-family: Arial;
+  font-size: 16px;
+}
+
+.column-logo {
+  width: 47px;
+  height: auto;
+}
+
+code {
+  background-color: #a8d6ff61;
+}
+
+.keyword {
+  font-family: Arial;
+  font-size: 16px;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.skeleton-row .skeleton-box {
+  height: 1.5em;       /* same as your cell content */
+  width: 80%;          /* adjust to match text length */
+  background: #eee;
+  border-radius: 4px;
+  display: inline-block;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%   { background-color: #eee; }
+  50%  { background-color: #ddd; }
+  100% { background-color: #eee; }
+}

@@ -33,6 +33,18 @@ function getRankSymbol(rank) {
     }
 }
 
+function SkeletonRow() {
+  return (
+    <tr className="skeleton-row">
+      <td className="keyword"><div className="skeleton-box"></div></td>
+      <td><div className="skeleton-box"></div></td>
+      <td><div className="skeleton-box"></div></td>
+      <td><div className="skeleton-box"></div></td>
+      <td><div className="skeleton-box"></div></td>
+    </tr>
+  );
+}
+
 function App() {
     const [rankList, setRankList] = useState([]);
 
@@ -104,22 +116,76 @@ function App() {
                 <thead>
                 <tr>
                     <th className="keyword"><h3>Keyword Phrase</h3></th>
-                    <th><h3>Maps</h3><h4>Local Search</h4><img src={gmapsLogo} alt="Google Maps Logo" className="column-logo"/></th>
-                    <th><h3>Google</h3><h4>Organic Search</h4><img src={googleLogo} alt="Google Search Logo" className="column-logo"/></th>
-                    <th><h3>Yahoo</h3><h4>Organic Search</h4><img src={yahooLogo} alt="Yahoo Logo" className="column-logo"/></th>
-                    <th><h3>Bing</h3><h4>Organic Search</h4><img src={bingLogo} alt="Bing Logo" className="column-logo"/></th>
+                    <th><h3>Maps</h3><h4>Local Search</h4><img src={gmapsLogo} alt="Google Maps Logo"
+                                                               className="column-logo"/></th>
+                    <th><h3>Google</h3><h4>Organic Search</h4><img src={googleLogo} alt="Google Search Logo"
+                                                                   className="column-logo"/></th>
+                    <th><h3>Yahoo</h3><h4>Organic Search</h4><img src={yahooLogo} alt="Yahoo Logo"
+                                                                  className="column-logo"/></th>
+                    <th><h3>Bing</h3><h4>Organic Search</h4><img src={bingLogo} alt="Bing Logo"
+                                                                 className="column-logo"/></th>
                 </tr>
                 </thead>
                 <tbody>
-                {rankList.slice().sort((a, b) => a.keyword.localeCompare(b.keyword)).map((row, index) => (
-                        <tr key={index}>
+                {keywords.slice().sort().map((phrase) => {
+                    const row = rankList.find(r => r.keyword === phrase);
+
+                    if (!row) {
+                        // Row hasn't loaded anything yet → full skeleton row
+                        return <SkeletonRow key={phrase}/>;
+                    }
+
+                    // Partial row → show keyword but keep spinners for missing cells
+                    return (
+                        <tr key={phrase}>
                             <td className="keyword">{row.keyword}</td>
-                            <td>{row.google ? getRankSymbol(row.google[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.google && (<a href={row.google[1]} target="_blank" rel="noopener noreferrer">View Google</a>)}</td>
-                            <td>{row.yahoo ? getRankSymbol(row.yahoo[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.yahoo && (<a href={row.yahoo[1]} target="_blank" rel="noopener noreferrer">View Yahoo</a>)}</td>
-                            <td>{row.bing ? getRankSymbol(row.bing[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.bing && (<a href={row.bing[1]} target="_blank" rel="noopener noreferrer">View Bing</a>)}</td>
-                            <td>{row.gmaps ? getRankSymbol(row.gmaps[0]) : (<div className="spinner-container"><div className="spinner"></div></div>)} {row.gmaps && (<a href={row.gmaps[1]} target="_blank" rel="noopener noreferrer">View Maps</a>)}</td>
+
+                            <td>
+                                {row.gmaps
+                                    ? getRankSymbol(row.gmaps[0])
+                                    : (<div className="spinner-container">
+                                        <div className="spinner"></div>
+                                    </div>)
+                                }
+                                {row.gmaps && (
+                                    <a href={row.gmaps[1]} target="_blank" rel="noopener noreferrer">View Maps</a>)}
+                            </td>
+
+                            <td>
+                                {row.google
+                                    ? getRankSymbol(row.google[0])
+                                    : (<div className="spinner-container">
+                                        <div className="spinner"></div>
+                                    </div>)
+                                }
+                                {row.google && (
+                                    <a href={row.google[1]} target="_blank" rel="noopener noreferrer">View Google</a>)}
+                            </td>
+
+                            <td>
+                                {row.yahoo
+                                    ? getRankSymbol(row.yahoo[0])
+                                    : (<div className="spinner-container">
+                                        <div className="spinner"></div>
+                                    </div>)
+                                }
+                                {row.yahoo && (
+                                    <a href={row.yahoo[1]} target="_blank" rel="noopener noreferrer">View Yahoo</a>)}
+                            </td>
+
+                            <td>
+                                {row.bing
+                                    ? getRankSymbol(row.bing[0])
+                                    : (<div className="spinner-container">
+                                        <div className="spinner"></div>
+                                    </div>)
+                                }
+                                {row.bing && (
+                                    <a href={row.bing[1]} target="_blank" rel="noopener noreferrer">View Bing</a>)}
+                            </td>
                         </tr>
-                    ))}
+                    );
+                })}
                 </tbody>
             </table>
         </>
