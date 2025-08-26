@@ -104,7 +104,8 @@ function App() {
                     });
             });
         });
-    }, []); // Empty dependency array: this effect only runs once after the component mounts
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // Empty dependency array: this effect only runs once after the component mounts. Otherwise you see weird jitters.
     return (
         <>
             <h1>
