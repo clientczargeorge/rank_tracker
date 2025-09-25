@@ -33,16 +33,27 @@ function getRankSymbol(rank) {
     }
 }
 
-function SkeletonRow() {
-  return (
-    <tr className="skeleton-row">
-      <td className="keyword"><div className="skeleton-box"></div></td>
-      <td><div className="skeleton-box"></div></td>
-      <td><div className="skeleton-box"></div></td>
-      <td><div className="skeleton-box"></div></td>
-      <td><div className="skeleton-box"></div></td>
-    </tr>
-  );
+// cache.js
+export function setCache(key, value, ttlSeconds) {
+  const expiresAt = Date.now() + ttlSeconds * 1000;
+  const item = { value, expiresAt };
+  localStorage.setItem(key, JSON.stringify(item));
+}
+
+export function getCache(key) {
+  const itemStr = localStorage.getItem(key);
+  if (!itemStr) return null;
+
+  try {
+    const item = JSON.parse(itemStr);
+    if (Date.now() > item.expiresAt) {
+      localStorage.removeItem(key); // expired
+      return null;
+    }
+    return item.value;
+  } catch {
+    return null;
+  }
 }
 
 function App() {
@@ -53,59 +64,93 @@ function App() {
 
     const clientName = params.get('clientName') || '';
     const clientUrl = params.get('clientUrl') || '';
-    const refresh = params.get('refresh') || 'false';
-    const debug = params.get('debug') || 'false';
+    const clientCountry = params.get('clientCountry') || '';
+    const clientCoordinates = params.get('client')
+    const refresh = params.get('refresh') || '';
+    const debug = params.get('debug') || '';
 
     const keywordsRaw = params.get('keywords') || '';
     const keywords = keywordsRaw.split(',').map(k => k.trim()).filter(k => k.length > 0);
 
+    const hasParams = clientName && clientUrl && keywords.length > 0;
+
+    // How long should values be stored in the user's browser?
+    const ttlSeconds = 10800; // 3 hours
+
     useEffect(() => {
+        if (!hasParams) return; // skip fetching if no params provided
+
         // A temporary in-memory object to store partially completed rows per keyword.
         // It accumulates results from multiple fetches (one per search engine).
         const keywordMap = {};
 
+        // Define which sources we want to fetch results from
+        const sources = ['google', 'yahoo', 'bing', 'gmaps'];
+
         // Loop through each keyword phrase that we want to track
         keywords.forEach((phrase) => {
-            // Define which sources we want to fetch results from
-            const sources = ['google', 'yahoo', 'bing', 'gmaps'];
-
             // For each source (e.g. Google, Yahoo), send a separate fetch request
             sources.forEach((source) => {
                 // Construct the API URL dynamically with the correct query parameters
-                //const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
-                const url = `https://rank-tracker.duckdns.org/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}`;
+                //const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_country=${encodeURIComponent(clientCountry)}`;
+                const url = `https://rank-tracker.duckdns.org/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_country=${encodeURIComponent(clientCountry)}`;
 
-                // Fetch results from the backend API
+                // Create a unique cache key
+                const cacheKey = `${source}:${phrase}:${clientUrl}`;
+
+                // Check cache first
+                const cached = getCache(cacheKey);
+                if (cached) {
+                    keywordMap[phrase] = keywordMap[phrase] || { keyword: phrase };
+                    keywordMap[phrase][source] = cached;
+
+                    setRankList(prevList => {
+                        const otherRows = prevList.filter(row => row.keyword !== phrase);
+                        return [...otherRows, keywordMap[phrase]];
+                    });
+
+                    return; // Skip fetch if cached
+                }
+
                 fetch(url)
-                    .then(res => res.json()) // Parse the response JSON
+                    .then(res => res.json())
                     .then(data => {
-                        // Initialize the keyword entry in keywordMap if it doesn't exist yet
+                        const value = [data[source], data["reference_url"]];
+
+                        // save into cache
+                        setCache(cacheKey, value, ttlSeconds);
+
                         keywordMap[phrase] = keywordMap[phrase] || { keyword: phrase };
+                        keywordMap[phrase][source] = value;
 
-                        // Save the result under the appropriate source name (e.g. "google", "bing", etc.)
-                        // We assume the API returns an object like { google: 1, reference_url: "https://googl....." } so we extract both fields
-                        // as a tuple that's stored in the keywordMap list.
-                        keywordMap[phrase][source] = [data[source], data["reference_url"]];
-
-                        // Update the React component's rank list state.
-                        // This rebuilds the rank list with the updated row for this keyword.
                         setRankList(prevList => {
-                            // Filter out any existing row for the same keyword (to avoid duplicates)
                             const otherRows = prevList.filter(row => row.keyword !== phrase);
-
-                            // Add the updated row (from keywordMap) back into the list
-                            // This allows the table to progressively show new data as each source arrives
                             return [...otherRows, keywordMap[phrase]];
                         });
                     })
                     .catch(err => {
-                        // If something went wrong with this particular fetch, log it
                         console.error(`Fetch error for ${source} - ${phrase}:`, err);
                     });
             });
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Empty dependency array: this effect only runs once after the component mounts. Otherwise you see weird jitters.
+
+    if (!hasParams) {
+        return (
+            <div className="instructions">
+                <h1>Rank Tracker</h1>
+                <p>
+                    No query parameters detected.
+                    Please supply them in the URL. Example:
+                </p>
+                <pre>
+                    {`${window.location.origin}?clientName=MyBusiness&clientUrl=https://example.com&clientCountry=US&keywords=coffee,tea,bakery`}
+                </pre>
+            </div>
+        );
+    }
+
     return (
         <>
             <h1>
@@ -129,14 +174,8 @@ function App() {
                 </thead>
                 <tbody>
                 {keywords.slice().sort().map((phrase) => {
-                    const row = rankList.find(r => r.keyword === phrase);
+                    const row = rankList.find(r => r.keyword === phrase) || {keyword: phrase};
 
-                    if (!row) {
-                        // Row hasn't loaded anything yet → full skeleton row
-                        return <SkeletonRow key={phrase}/>;
-                    }
-
-                    // Partial row → show keyword but keep spinners for missing cells
                     return (
                         <tr key={phrase}>
                             <td className="keyword">{row.keyword}</td>
@@ -144,45 +183,45 @@ function App() {
                             <td>
                                 {row.gmaps
                                     ? getRankSymbol(row.gmaps[0])
-                                    : (<div className="spinner-container">
+                                    : <div className="spinner-container">
                                         <div className="spinner"></div>
-                                    </div>)
-                                }
+                                    </div>}
                                 {row.gmaps && (
-                                    <a href={row.gmaps[1]} target="_blank" rel="noopener noreferrer">View Maps</a>)}
+                                    <a href={row.gmaps[1]} target="_blank" rel="noopener noreferrer">View Maps</a>
+                                )}
                             </td>
 
                             <td>
                                 {row.google
                                     ? getRankSymbol(row.google[0])
-                                    : (<div className="spinner-container">
+                                    : <div className="spinner-container">
                                         <div className="spinner"></div>
-                                    </div>)
-                                }
+                                    </div>}
                                 {row.google && (
-                                    <a href={row.google[1]} target="_blank" rel="noopener noreferrer">View Google</a>)}
+                                    <a href={row.google[1]} target="_blank" rel="noopener noreferrer">View Google</a>
+                                )}
                             </td>
 
                             <td>
                                 {row.yahoo
                                     ? getRankSymbol(row.yahoo[0])
-                                    : (<div className="spinner-container">
+                                    : <div className="spinner-container">
                                         <div className="spinner"></div>
-                                    </div>)
-                                }
+                                    </div>}
                                 {row.yahoo && (
-                                    <a href={row.yahoo[1]} target="_blank" rel="noopener noreferrer">View Yahoo</a>)}
+                                    <a href={row.yahoo[1]} target="_blank" rel="noopener noreferrer">View Yahoo</a>
+                                )}
                             </td>
 
                             <td>
                                 {row.bing
                                     ? getRankSymbol(row.bing[0])
-                                    : (<div className="spinner-container">
+                                    : <div className="spinner-container">
                                         <div className="spinner"></div>
-                                    </div>)
-                                }
+                                    </div>}
                                 {row.bing && (
-                                    <a href={row.bing[1]} target="_blank" rel="noopener noreferrer">View Bing</a>)}
+                                    <a href={row.bing[1]} target="_blank" rel="noopener noreferrer">View Bing</a>
+                                )}
                             </td>
                         </tr>
                     );
