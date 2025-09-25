@@ -64,15 +64,16 @@ function App() {
 
     const clientName = params.get('clientName') || '';
     const clientUrl = params.get('clientUrl') || '';
-    const clientCountry = params.get('clientCountry') || '';
-    const clientCoordinates = params.get('client')
+    const clientLocation = params.get('clientLocation') || '';
+    const clientCoordinates = params.get('clientCoordinates') || '';
+    const gmapsName = params.get('gmapsName') || '';
     const refresh = params.get('refresh') || '';
     const debug = params.get('debug') || '';
 
     const keywordsRaw = params.get('keywords') || '';
     const keywords = keywordsRaw.split(',').map(k => k.trim()).filter(k => k.length > 0);
 
-    const hasParams = clientName && clientUrl && keywords.length > 0;
+    const hasParams = clientName && clientUrl && gmapsName && keywords.length > 0;
 
     // How long should values be stored in the user's browser?
     const ttlSeconds = 10800; // 3 hours
@@ -92,11 +93,11 @@ function App() {
             // For each source (e.g. Google, Yahoo), send a separate fetch request
             sources.forEach((source) => {
                 // Construct the API URL dynamically with the correct query parameters
-                //const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_country=${encodeURIComponent(clientCountry)}`;
-                const url = `https://rank-tracker.duckdns.org/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_country=${encodeURIComponent(clientCountry)}`;
+                const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_location=${encodeURIComponent(clientLocation)}&client_coordinates=${encodeURIComponent(clientCoordinates)}&gmaps_name=${encodeURIComponent(gmapsName)}`;
+                //const url = `https://rank-tracker.duckdns.org/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_location=${encodeURIComponent(clientLocation)}&client_coordinates=${encodeURIComponent(clientCoordinates)}`;
 
                 // Create a unique cache key
-                const cacheKey = `${source}:${phrase}:${clientUrl}`;
+                const cacheKey = `${source}:${phrase}:${clientUrl}:${clientLocation}:${clientCoordinates}`;
 
                 // Check cache first
                 const cached = getCache(cacheKey);
@@ -142,10 +143,18 @@ function App() {
                 <h1>Rank Tracker</h1>
                 <p>
                     No query parameters detected.
-                    Please supply them in the URL. Example:
+                    Please supply the following fields:
+                    clientUrl: The client's website URL (e.g. avidcoffee.com)<br/>
+                    clientName: The client's business name (e.g. Avid Coffee)<br/>
+                    gmapsName: The name of the business as it appears in Google Maps (e.g. Avid Coffee)<br/>
+                    keywords: A comma-separated list of keyword phrases to track (e.g. Petaluma coffee,avid+coffee,sonoma+county+coffee,coffee+roasterz)<br/>
+                    Optionally, you can also supply:
+                    clientLocation: The city or area to use for localized search (google & bing only) (e.g. petaluma)<br/>
+                    clientCoordinates: The latitude and longitude to use for Google Maps localized search. MUST be in this format exactly: @38.244923,-122.626991,14z<br/>
+                    Example:
                 </p>
                 <pre>
-                    {`${window.location.origin}?clientName=MyBusiness&clientUrl=https://example.com&clientCountry=US&keywords=coffee,tea,bakery`}
+                    {`${window.location.origin}?clientName=Avid Coffee&clientUrl=avidcoffee.com&gmapsName=Avid Coffee&keywords=Petaluma coffee,avid+coffee,sonoma+county+coffee,coffee+roasterz&location=petaluma&coordinates,coordinates=@38.244923,-122.626991,14z&refresh=false`}
                 </pre>
             </div>
         );

@@ -27,7 +27,7 @@ def cache_response(ttl=CACHE_TTL):
         def wrapper(*args, **kwargs):
             refresh = (request.args.get("refresh") == "true") # The request query parameter forces a refresh of the cached data.
             # Create a unique cache key from URL path + sorted query params
-            allowed_keys = ["client_name", "client_url", "keyword", "source"]
+            allowed_keys = ["client_name", "client_url", "keyword", "source", "client_location", "client_coordinates"]
             filtered_args = {k: request.args[k] for k in allowed_keys if k in request.args}
             cache_key = f"{request.path}:{json.dumps(filtered_args, sort_keys=True)}"
             if not refresh:
@@ -61,6 +61,9 @@ def cache_response(ttl=CACHE_TTL):
 def serp_results():
     client_url = request.args.get("client_url")
     client_name = request.args.get("client_name")
+    client_location = request.args.get("client_location")
+    client_coordinates = request.args.get("client_coordinates")
+    gmaps_name = request.args.get("gmaps_name")
     keyword = request.args.get("keyword")
     source = request.args.get("source")
 
@@ -74,6 +77,9 @@ def serp_results():
             "hl": "en",
             "gl": "us"
         }
+
+        if client_location:
+            params["location"] = client_location
 
         reference_url = f"https://www.google.com/search?{urlencode(params)}"
 
@@ -112,6 +118,9 @@ def serp_results():
             "gl": "us"
         }
 
+        if client_location:
+            params["location"] = client_location
+
         reference_url = f"https://www.bing.com/search?{urlencode(params)}"
 
         if debug:
@@ -148,6 +157,8 @@ def serp_results():
             "hl": "en",
             "gl": "us"
         }
+
+
 
         reference_url = f"https://search.yahoo.com/search?{urlencode(params)}"
 
@@ -186,7 +197,12 @@ def serp_results():
             "gl": "us"
         }
 
-        reference_url = f"https://www.google.com/maps/search/{quote_plus(params['q'])}?{urlencode({'hl': params['hl'], 'gl': params['gl']})}"
+        if client_coordinates:
+            params["ll"] = client_coordinates
+            reference_url = f"https://www.google.com/maps/search/{quote_plus(params['q'])}/{params['ll']}"
+
+        else:
+            reference_url = f"https://www.google.com/maps/search/{quote_plus(params['q'])}?{urlencode({'hl': params['hl'], 'gl': params['gl']})}"
 
         if debug:
             return jsonify({
@@ -198,7 +214,7 @@ def serp_results():
             s = serp_client.search(**params)
             results_list = s.get("local_results", [])
             for entry in results_list:
-                if client_name == entry.get("title", ""):
+                if gmaps_name == entry.get("title", ""):
                     client_ranking_gmaps = entry.get("position", -1)
                     return jsonify({
                         "gmaps": client_ranking_gmaps,
