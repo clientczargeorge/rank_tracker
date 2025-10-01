@@ -113,9 +113,7 @@ function App() {
                     return; // Skip fetch if cached
                 }
 
-                fetch(url)
-                    .then(res => res.json())
-                    .then(data => {
+                fetch(url).then(res => res.json()).then(data => {
                         const value = [data[source], data["reference_url"]];
 
                         // save into cache
@@ -142,20 +140,22 @@ function App() {
             <div className="instructions">
                 <h1>Rank Tracker</h1>
                 <p>
-                    No query parameters detected.
-                    Please supply the following fields:
-                    clientUrl: The client's website URL (e.g. avidcoffee.com)<br/>
-                    clientName: The client's business name (e.g. Avid Coffee)<br/>
-                    gmapsName: The name of the business as it appears in Google Maps (e.g. Avid Coffee)<br/>
-                    keywords: A comma-separated list of keyword phrases to track (e.g. Petaluma coffee,avid+coffee,sonoma+county+coffee,coffee+roasterz)<br/>
-                    Optionally, you can also supply:
-                    clientLocation: The city or area to use for localized search (google & bing only) (e.g. petaluma)<br/>
-                    clientCoordinates: The latitude and longitude to use for Google Maps localized search. MUST be in this format exactly: @38.244923,-122.626991,14z<br/>
-                    Example:
-                </p>
-                <pre>
-                    {`${window.location.origin}?clientName=Avid Coffee&clientUrl=avidcoffee.com&gmapsName=Avid Coffee&keywords=Petaluma coffee,avid+coffee,sonoma+county+coffee,coffee+roasterz&location=petaluma&coordinates,coordinates=@38.244923,-122.626991,14z&refresh=false`}
-                </pre>
+                    <h3>Incomplete query parameters detected in URL</h3><br/>
+                    <h4>Please supply the following fields in your URL</h4>
+                    <br/>
+                    <code>clientUrl</code> - The client's website URL (e.g. avidcoffee.com)<br/>
+                    <code>clientName</code> - The client's business name (e.g. Avid Coffee)<br/>
+                    <code>gmapsName</code> - The name of the business as it appears in Google Maps (e.g. Avid
+                    Coffee). This is needed to determine the google maps ranking<br/>
+                    <code>keywords</code> - A comma-separated list of keyword phrases to track (e.g. Petaluma
+                    coffee,avid+coffee,sonoma+county+coffee,coffee+roasterz)<br/>
+                    <code>clientLocation</code> <i>Optional</i> - The city or area to use for localized search (google & bing only) (an example value would be: <code>petaluma</code>)<br/>
+                    <code>clientCoordinates</code> <i>Optional</i> - The latitude and longitude to use for Google Maps localized search. MUST be in this format exactly: <code>@38.244923,-122.626991,14z</code><br/>
+                    <code>refresh</code> <i>Optional</i> - Set to <code>true</code> to bypass cached results and force fresh fetches from each search engine.<br/>
+                    <code>debug</code> <i>Optional</i> - Set to <code>true</code> to enable debug mode in the backend API.<br/>
+                    <br/><br/>
+                    <i>Example:</i>
+                </p><code>{`${window.location.origin}?clientName=Avid Coffee&clientUrl=avidcoffee.com&gmapsName=Avid Coffee&keywords=Petaluma coffee,avid+coffee,sonoma+county+coffee&clientLocation=petaluma&clientCoordinates=@38.2449,-122.6270,14z&refresh=false`}</code>
             </div>
         );
     }
@@ -171,14 +171,10 @@ function App() {
                 <thead>
                 <tr>
                     <th className="keyword"><h3>Keyword Phrase</h3></th>
-                    <th><h3>Maps</h3><h4>Local Search</h4><img src={gmapsLogo} alt="Google Maps Logo"
-                                                               className="column-logo"/></th>
-                    <th><h3>Google</h3><h4>Organic Search</h4><img src={googleLogo} alt="Google Search Logo"
-                                                                   className="column-logo"/></th>
-                    <th><h3>Yahoo</h3><h4>Organic Search</h4><img src={yahooLogo} alt="Yahoo Logo"
-                                                                  className="column-logo"/></th>
-                    <th><h3>Bing</h3><h4>Organic Search</h4><img src={bingLogo} alt="Bing Logo"
-                                                                 className="column-logo"/></th>
+                    <th><h3>Maps</h3><h4>Local Search</h4><img src={gmapsLogo} alt="Google Maps Logo" className="column-logo"/></th>
+                    <th><h3>Google</h3><h4>Organic Search</h4><img src={googleLogo} alt="Google Search Logo" className="column-logo"/></th>
+                    <th><h3>Yahoo</h3><h4>Organic Search</h4><img src={yahooLogo} alt="Yahoo Logo" className="column-logo"/></th>
+                    <th><h3>Bing</h3><h4>Organic Search</h4><img src={bingLogo} alt="Bing Logo" className="column-logo"/></th>
                 </tr>
                 </thead>
                 <tbody>
