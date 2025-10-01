@@ -66,7 +66,7 @@ function App() {
     const clientUrl = params.get('clientUrl') || '';
     const clientLocation = params.get('clientLocation') || '';
     const clientCoordinates = params.get('clientCoordinates') || '';
-    const gmapsName = params.get('gmapsName') || '';
+    const gmapsName = params.get('gmapsName') || clientName; // default to clientName if not provided
     const refresh = params.get('refresh') || '';
     const debug = params.get('debug') || '';
 
@@ -145,10 +145,10 @@ function App() {
                     <br/>
                     <code>clientUrl</code> - The client's website URL (e.g. avidcoffee.com)<br/>
                     <code>clientName</code> - The client's business name (e.g. Avid Coffee)<br/>
-                    <code>gmapsName</code> - The name of the business as it appears in Google Maps (e.g. Avid
-                    Coffee). This is needed to determine the google maps ranking<br/>
                     <code>keywords</code> - A comma-separated list of keyword phrases to track (e.g. Petaluma
                     coffee,avid+coffee,sonoma+county+coffee,coffee+roasterz)<br/>
+                    <code>gmapsName</code> <i>Optional</i> - The name of the business as it appears in Google Maps (e.g. Avid
+                    Coffee). This is needed to determine the google maps ranking. This defaults to the clientName parameter value if no value is supplied.<br/>
                     <code>clientLocation</code> <i>Optional</i> - The city or area to use for localized search (google & bing only) (an example value would be: <code>petaluma</code>)<br/>
                     <code>clientCoordinates</code> <i>Optional</i> - The latitude and longitude to use for Google Maps localized search. MUST be in this format exactly: <code>@38.244923,-122.626991,14z</code><br/>
                     <code>refresh</code> <i>Optional</i> - Set to <code>true</code> to bypass cached results and force fresh fetches from each search engine.<br/>
