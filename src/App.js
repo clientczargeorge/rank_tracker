@@ -93,8 +93,8 @@ function App() {
             // For each source (e.g. Google, Yahoo), send a separate fetch request
             sources.forEach((source) => {
                 // Construct the API URL dynamically with the correct query parameters
-                const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_location=${encodeURIComponent(clientLocation)}&client_coordinates=${encodeURIComponent(clientCoordinates)}&gmaps_name=${encodeURIComponent(gmapsName)}`;
-                //const url = `https://rank-tracker.duckdns.org/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_location=${encodeURIComponent(clientLocation)}&client_coordinates=${encodeURIComponent(clientCoordinates)}`;
+                //const url = `http://localhost:5000/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_location=${encodeURIComponent(clientLocation)}&client_coordinates=${encodeURIComponent(clientCoordinates)}&gmaps_name=${encodeURIComponent(gmapsName)}`;
+                const url = `https://rank-tracker.duckdns.org/api?source=${source}&debug=${debug}&refresh=${refresh}&client_url=${encodeURIComponent(clientUrl)}&client_name=${encodeURIComponent(clientName)}&keyword=${encodeURIComponent(phrase)}&client_location=${encodeURIComponent(clientLocation)}&client_coordinates=${encodeURIComponent(clientCoordinates)}&gmaps_name=${encodeURIComponent(gmapsName)}`;
 
                 // Create a unique cache key
                 const cacheKey = `${source}:${phrase}:${clientUrl}:${clientLocation}:${clientCoordinates}`;
@@ -155,7 +155,7 @@ function App() {
                     <code>debug</code> <i>Optional</i> - Set to <code>true</code> to enable debug mode in the backend API.<br/>
                     <br/><br/>
                     <i>Example:</i>
-                </p><code>{`${window.location.origin}?clientName=Avid Coffee&clientUrl=avidcoffee.com&gmapsName=Avid Coffee&keywords=Petaluma coffee,avid+coffee,sonoma+county+coffee&clientLocation=petaluma&clientCoordinates=@38.2449,-122.6270,14z&refresh=false`}</code>
+                </p><code>{`https://clientczargeorge.github.io/rank_tracker/?clientName=Avid Coffee&clientUrl=avidcoffee.com&gmapsName=Avid Coffee&keywords=Petaluma coffee,avid+coffee,sonoma+county+coffee&clientLocation=petaluma&clientCoordinates=@38.2449,-122.6270,14z&refresh=false`}</code>
             </div>
         );
     }
